@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Container, Grid, Typography } from '@mui/material';
-import Card from './Card';
+import Card from '../Subcomponents/Header/Card/Card';
 import style from './MenuProducts'
-import Header from "./Header";
+import Header from "../Container/Container";
 
 
 const btnStyle = {
@@ -14,7 +14,7 @@ const btnStyle = {
   width: '10em',
 };
 
-const MenuProducts = ({ role }) => {
+const MenuProducts = ({ word }) => {
   const [dataProduct, setDataProduct] = useState([]);
   const [refreshData, setRefreshData] = useState(false);
   const [open, setOpen] = useState(false);
@@ -29,11 +29,12 @@ const MenuProducts = ({ role }) => {
       .then((data) => setDataProduct(data));
   }, [refreshData]);
 
+
+
   return (
     <section className={style.sectionMenu}>
       <Container>
         <>
-          <Header />
           <Typography
             variant="h4"
             component="h2"
@@ -42,16 +43,32 @@ const MenuProducts = ({ role }) => {
           >
             Productos
           </Typography>
-          <Grid container spacing={3}>
+          {word ? 
+            <Grid container spacing={3}>
+            {dataProduct.filter((product) => {
+              product.title.includes(word)
+              return (
+                <Card
+                  key={product.id}
+                  product={product}
+                  refreshData={refreshData}
+                  setRefreshData={setRefreshData}
+                />
+              )}
+            )}
+          </Grid>
+            :
+            <Grid container spacing={3}>
             {dataProduct.map((product) => (
               <Card
-                key={product._id}
+                key={product.id}
                 product={product}
                 refreshData={refreshData}
                 setRefreshData={setRefreshData}
               />
-            ))}
-          </Grid>
+              ))}
+            </Grid>
+          }
         </>
       </Container>
     </section>
