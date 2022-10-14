@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import './App.css'
-import MenuProducts from './components/MenuProducts'
+import Container from './components/Container/Container'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <MenuProducts />
+    <Container />
   )
 }
 

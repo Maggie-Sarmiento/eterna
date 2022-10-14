@@ -54,8 +54,7 @@ const theme = createTheme({
 });
 
 const Card = ({id, 
-  product,
- refreshData, setRefreshData,
+  product
 }) => (
   <Grid item xs={6} sm={3}>
     <ThemeProvider theme={theme}>
