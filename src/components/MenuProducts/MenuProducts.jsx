@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Container, Grid, Typography } from '@mui/material';
+import { Container, createTheme, Grid, Typography } from '@mui/material';
 import Card from '../Subcomponents/Header/Card/Card';
 import style from './MenuProducts'
-import Header from "../Container/Container";
+import ModalDetails from "../Subcomponents/Header/Card/ModalDetails/ModalDetails";
 
 
 const btnStyle = {
@@ -18,7 +18,10 @@ const MenuProducts = ({ word }) => {
   const [dataProduct, setDataProduct] = useState([]);
   const [refreshData, setRefreshData] = useState(false);
   const [open, setOpen] = useState(false);
-  // const handleOpen = () => setOpen(true);
+
+  const test = () => {
+    console.log('test')
+  }
 
   useEffect(() => {
     const requestOption = {
@@ -44,27 +47,26 @@ const MenuProducts = ({ word }) => {
             Productos
           </Typography>
           {word ? 
-            <Grid container spacing={3}>
+            <Grid container spacing={3} >
             {dataProduct.filter((product) => {
               product.title.includes(word)
               return (
                 <Card
                   key={product.id}
+                  id={product.id}
                   product={product}
-                  refreshData={refreshData}
-                  setRefreshData={setRefreshData}
+                  onclick={test}
                 />
               )}
             )}
           </Grid>
             :
-            <Grid container spacing={3}>
+            <Grid container spacing={3}  >
             {dataProduct.map((product) => (
               <Card
                 key={product.id}
+                id={product.id}
                 product={product}
-                refreshData={refreshData}
-                setRefreshData={setRefreshData}
               />
               ))}
             </Grid>
