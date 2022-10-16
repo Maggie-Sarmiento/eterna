@@ -14,24 +14,27 @@ const btnStyle = {
   width: '10em',
 };
 
-const MenuProducts = ({ word }) => {
-  const [dataProduct, setDataProduct] = useState([]);
-  const [refreshData, setRefreshData] = useState(false);
-  const [open, setOpen] = useState(false);
+const MenuProducts = ({ dataProduct }) => {
+  // const [dataProduct, setDataProduct] = useState([]);
+  // const [refreshData, setRefreshData] = useState(false);
+  // const [dataFiltered, setDataFiltered] = useState([])
+  // const [open, setOpen] = useState(false);
 
-  const test = () => {
-    console.log('test')
-  }
-
-  useEffect(() => {
-    const requestOption = {
-      method: 'GET'
-    };
-    fetch('https://gnk.onm.mybluehost.me/products_api/', requestOption)
-      .then((response) => response.json())
-      .then((data) => setDataProduct(data));
-  }, [refreshData]);
-
+  // useEffect(() => {
+  //   console.log('use effe')
+  //   const requestOption = {
+  //     method: 'GET'
+  //   };
+  //   fetch('https://gnk.onm.mybluehost.me/products_api/', requestOption)
+  //   .then((response) => response.json())
+  //   .then((data) => setDataProduct(data));
+  // }, [refreshData]);
+  
+  // console.log('menuPro')
+  // console.log(word)
+  // if (word) {
+  //   setDataFiltered(dataProduct.filter((product) => product.title.includes(word)))
+  // }
 
 
   return (
@@ -46,21 +49,6 @@ const MenuProducts = ({ word }) => {
           >
             Productos
           </Typography>
-          {word ? 
-            <Grid container spacing={3} >
-            {dataProduct.filter((product) => {
-              product.title.includes(word)
-              return (
-                <Card
-                  key={product.id}
-                  id={product.id}
-                  product={product}
-                  onclick={test}
-                />
-              )}
-            )}
-          </Grid>
-            :
             <Grid container spacing={3}  >
             {dataProduct.map((product) => (
               <Card
@@ -70,7 +58,6 @@ const MenuProducts = ({ word }) => {
               />
               ))}
             </Grid>
-          }
         </>
       </Container>
     </section>
