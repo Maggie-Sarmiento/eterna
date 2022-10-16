@@ -1,14 +1,34 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import style from './Container.module.css';
 import { TextField } from "@mui/material";
 import MenuProducts from "../MenuProducts/MenuProducts";
 
 const Container = () => {
-  const [word, setWord] = useState('')
+  const [dataProduct, setDataProduct] = useState([]);
+  const [refreshData, setRefreshData] = useState(false);
+
+  useEffect(() => {
+    console.log('use effe')
+    const requestOption = {
+      method: 'GET'
+    };
+    fetch('https://gnk.onm.mybluehost.me/products_api/', requestOption)
+    .then((response) => response.json())
+    .then((data) => setDataProduct(data));
+  }, [refreshData]);
   
+  
+  const [word, setWord] = useState('')
   const getData = (e) => {
-    setWord(word + e.key)
+    setWord(e.target.value)
   }
+
+  let dataFiltered;
+  if (word) {
+    let reg = RegExp(word, 'i')
+    dataFiltered = dataProduct.filter((product) => product.title.match(reg))
+  }
+
 
   return (
     <>
@@ -23,7 +43,8 @@ const Container = () => {
           />
         </nav>
       </header>
-      <MenuProducts word={word} />
+      <MenuProducts 
+      dataProduct={word ? dataFiltered : dataProduct} />
     </>
   );
 }
