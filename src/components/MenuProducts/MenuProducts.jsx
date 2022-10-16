@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, createTheme, Grid, Typography } from '@mui/material';
+import { Container, Grid, Typography, Box, CircularProgress } from '@mui/material';
 import Card from '../Subcomponents/Header/Card/Card';
 import style from './MenuProducts'
 import ModalDetails from "../Subcomponents/Header/Card/ModalDetails/ModalDetails";
@@ -42,20 +42,37 @@ const MenuProducts = ({ dataProduct }) => {
       <Container>
         <>
           <Typography
-            variant="h4"
+            variant="h5"
             component="h2"
             marginBottom={3}
             marginTop={5}
+            fontWeight={300}
           >
-            Productos
+            PRODUCTOS
           </Typography>
             <Grid container spacing={3}  >
-            {dataProduct.map((product) => (
-              <Card
-                key={product.id}
-                id={product.id}
-                product={product}
-              />
+            { dataProduct.length === 0 ?
+              <Box sx={{
+                color: 'grey.500',
+                display: 'flex',
+                marginLeft: '43%',
+                marginTop: '6em',
+
+                }}>
+                <Box sx={{ alignSelf: 'center' }} >
+                  <CircularProgress color="inherit" />
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <CircularProgress color="inherit" />
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <CircularProgress color="inherit"  />
+                </Box>
+              </Box>
+              : dataProduct.map((product) => (
+                <Card
+                  key={product.id}
+                  id={product.id}
+                  product={product}
+                />
               ))}
             </Grid>
         </>

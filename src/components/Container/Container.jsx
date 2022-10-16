@@ -44,7 +44,8 @@ const Container = () => {
         </nav>
       </header>
       <MenuProducts 
-      dataProduct={word ? dataFiltered : dataProduct} />
+        dataProduct={word ? dataFiltered : dataProduct} 
+      />
     </>
   );
 }
