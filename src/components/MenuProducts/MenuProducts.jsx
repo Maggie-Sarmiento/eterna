@@ -15,27 +15,6 @@ const btnStyle = {
 };
 
 const MenuProducts = ({ dataProduct }) => {
-  // const [dataProduct, setDataProduct] = useState([]);
-  // const [refreshData, setRefreshData] = useState(false);
-  // const [dataFiltered, setDataFiltered] = useState([])
-  // const [open, setOpen] = useState(false);
-
-  // useEffect(() => {
-  //   console.log('use effe')
-  //   const requestOption = {
-  //     method: 'GET'
-  //   };
-  //   fetch('https://gnk.onm.mybluehost.me/products_api/', requestOption)
-  //   .then((response) => response.json())
-  //   .then((data) => setDataProduct(data));
-  // }, [refreshData]);
-  
-  // console.log('menuPro')
-  // console.log(word)
-  // if (word) {
-  //   setDataFiltered(dataProduct.filter((product) => product.title.includes(word)))
-  // }
-
 
   return (
     <section className={style.sectionMenu}>

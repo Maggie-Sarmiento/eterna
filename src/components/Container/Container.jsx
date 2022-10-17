@@ -1,49 +1,78 @@
 import React, { useState, useEffect } from "react"
+import InfiniteScroll from "react-infinite-scroll-component";
 import style from './Container.module.css';
 import { TextField } from "@mui/material";
 import MenuProducts from "../MenuProducts/MenuProducts";
 
 const Container = () => {
-  const [dataProduct, setDataProduct] = useState([]);
   const [refreshData, setRefreshData] = useState(false);
-  const [page, setPage] = useState(1)
 
-  useEffect(() => {
-    fetch('https://gnk.onm.mybluehost.me/products_api/')
-    .then((response) => response.json())
-    .then((data) => setDataProduct(data));
-  }, [refreshData]);
+  // useState for multiples state 
+  const [dataPagination, setDataPagination] = useState(
+    {
+      dataLoad: [], 
+      page: 1,
+      dataProduct: [],
+      dataFiltered: []
+    })
+  
+    
+    // conection fetc with API
+    useEffect(() => {  
+      fetch('https://gnk.onm.mybluehost.me/products_api/')
+      .then((response) => response.json())
+      .then((data) => setDataPagination({...dataPagination, dataProduct: data, dataLoad: dataPerPage(data, 1, 12)}));
+    }, [refreshData]);
   
   
-  const [word, setWord] = useState('')
-  const getData = (e) => {
-    setWord(e.target.value)
-  }
-
-  let dataFiltered = dataProduct
-  if (word) {
-    let reg = RegExp(word, 'i')
-    dataFiltered = dataProduct.filter((product) => product.title.match(reg))
-  }
-
-  const pagination = (page, perPage) => {
+  // function return dataPerpage 
+  const dataPerPage = (data, page, perPage) => {
     let index, last 
-
     if (page === 1 || page <= 0) {
       index = 0,
       last = perPage
-    } else if (page > dataProduct.length) {
+    } else if (page > data.length) {
       index = page - 1
-      last = dataProduct.length
+      last = data.length
     } else {
       index = page * perPage - perPage
       last = index + perPage
     }
-
-    return dataFiltered.slice(index, last)
+    
+    let test = data.slice(index, last)
+    
+    return test
   }
 
+  // get input.value, filter for input, save in datafiltered and dataLoad
+  const getData = (e) => {
+    let reg = RegExp(e.target.value, 'i')
+    let dataFilter = dataPagination.dataProduct.filter((product) => product.title.match(reg))
+    let data = dataPerPage(dataFilter, 1, 12)
+    setDataPagination({...dataPagination, dataLoad: data, dataFiltered: dataFilter, page: 1})
+    console.log(e.target.value);
+  }
 
+  // function that reload the pages of elments
+  const morePage = () => {
+    let data = dataPagination.dataFiltered.length === 0 ? dataPagination.dataProduct : dataPagination.dataFiltered
+
+    console.log('morePags')
+    console.log(dataPagination.page)
+
+    setDataPagination(
+      {
+        ...dataPagination, 
+        dataLoad: dataPagination.dataLoad.concat(dataPerPage(data, dataPagination.page + 1, 12)), 
+        page: dataPagination.page + 1 
+      }
+    )
+  }
+  
+
+  console.log(dataPagination.dataLoad);
+
+  // method infinite scroll of react
   return (
     <>
       <header className={style.header} >
@@ -57,11 +86,16 @@ const Container = () => {
           />
         </nav>
       </header>
-      <div>
+      <InfiniteScroll
+        dataLength={dataPagination.dataLoad.length}
+        next={() => morePage()}
+        hasMore={true}
+        scrollableTarget="scrollableDiv"
+        >
         <MenuProducts 
-          dataProduct={pagination(page, 12)}
+          dataProduct={dataPagination.dataLoad}
         />
-      </div>
+      </InfiniteScroll>
     </>
   );
 }
