@@ -21,7 +21,7 @@ const Container = () => {
     useEffect(() => {  
       fetch('https://gnk.onm.mybluehost.me/products_api/')
       .then((response) => response.json())
-      .then((data) => setDataPagination({...dataPagination, dataProduct: data, dataLoad: dataPerPage(data, 1, 12)}));
+      .then((data) => setDataPagination({...dataPagination, dataProduct: data, dataLoad: dataPerPage(data, 1, 16)}));
     }, [refreshData]);
   
   
@@ -39,18 +39,19 @@ const Container = () => {
       last = index + perPage
     }
     
-    let test = data.slice(index, last)
-    
-    return test
+    return data.slice(index, last)
   }
 
   // get input.value, filter for input, save in datafiltered and dataLoad
   const getData = (e) => {
-    let reg = RegExp(e.target.value, 'i')
-    let dataFilter = dataPagination.dataProduct.filter((product) => product.title.match(reg))
-    let data = dataPerPage(dataFilter, 1, 12)
-    setDataPagination({...dataPagination, dataLoad: data, dataFiltered: dataFilter, page: 1})
-    console.log(e.target.value);
+    if (e.target.value.length > 3) {
+      let reg = RegExp(e.target.value, 'i')
+      let dataFilter = dataPagination.dataProduct.filter((product) => product.title.match(reg))
+      let data = dataPerPage(dataFilter, 1, 16)
+      setDataPagination({...dataPagination, dataLoad: data, dataFiltered: dataFilter, page: 1})
+    } else if (e.target.value.length < 4) {
+      setDataPagination({...dataPagination, dataLoad: dataPerPage(dataPagination.dataProduct, 1, 16)})
+    }
   }
 
   // function that reload the pages of elments
@@ -63,14 +64,11 @@ const Container = () => {
     setDataPagination(
       {
         ...dataPagination, 
-        dataLoad: dataPagination.dataLoad.concat(dataPerPage(data, dataPagination.page + 1, 12)), 
+        dataLoad: dataPagination.dataLoad.concat(dataPerPage(data, dataPagination.page + 1, 16)), 
         page: dataPagination.page + 1 
       }
     )
   }
-  
-
-  console.log(dataPagination.dataLoad);
 
   // method infinite scroll of react
   return (
