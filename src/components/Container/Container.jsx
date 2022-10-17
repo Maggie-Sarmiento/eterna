@@ -6,13 +6,10 @@ import MenuProducts from "../MenuProducts/MenuProducts";
 const Container = () => {
   const [dataProduct, setDataProduct] = useState([]);
   const [refreshData, setRefreshData] = useState(false);
+  const [page, setPage] = useState(1)
 
   useEffect(() => {
-    console.log('use effe')
-    const requestOption = {
-      method: 'GET'
-    };
-    fetch('https://gnk.onm.mybluehost.me/products_api/', requestOption)
+    fetch('https://gnk.onm.mybluehost.me/products_api/')
     .then((response) => response.json())
     .then((data) => setDataProduct(data));
   }, [refreshData]);
@@ -23,16 +20,33 @@ const Container = () => {
     setWord(e.target.value)
   }
 
-  let dataFiltered;
+  let dataFiltered = dataProduct
   if (word) {
     let reg = RegExp(word, 'i')
     dataFiltered = dataProduct.filter((product) => product.title.match(reg))
   }
 
+  const pagination = (page, perPage) => {
+    let index, last 
+
+    if (page === 1 || page <= 0) {
+      index = 0,
+      last = perPage
+    } else if (page > dataProduct.length) {
+      index = page - 1
+      last = dataProduct.length
+    } else {
+      index = page * perPage - perPage
+      last = index + perPage
+    }
+
+    return dataFiltered.slice(index, last)
+  }
+
 
   return (
     <>
-      <header className={style.header}>
+      <header className={style.header} >
         <nav className={style.nav}>
           <h2>ETERNA</h2>
           <TextField 
@@ -43,9 +57,11 @@ const Container = () => {
           />
         </nav>
       </header>
-      <MenuProducts 
-        dataProduct={word ? dataFiltered : dataProduct} 
-      />
+      <div>
+        <MenuProducts 
+          dataProduct={pagination(page, 12)}
+        />
+      </div>
     </>
   );
 }
